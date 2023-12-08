@@ -1,0 +1,50 @@
+// =================== CS251 DEX Project =================== // 
+//                      Design Document                      //
+//            Campbell Hoskins & James Stevens               //
+// ========================================================= //  
+
+1. Explain why adding and removing liquidity to your exchange does not change the exchange rate.
+
+
+When you add liquidity to the exchange, the exchange rate does not change because the liquidity provider is adding amounts of eth and tokens
+that are directly proportional to the current exchange reserves of the two currencies. If the exchange rate of eth:tokens is 2:1 and a 
+liquidity provider adds 100 eth of liquidity, then a proportional amount of 50 tokens will also be added to the exchange 
+in order to keeps the exchange rate the same and only change the k value. In the same way, removing liquidity does not change the 
+rate because amount of tokens and eth are removed in amounts proportional to the exchange rate, ensuring that the rate remains the same.
+
+
+2. Explain your scheme for rewarding liquidity providers and justify the design decisions you made. How does it satisfy the liquidity rewards requirements outlined in Section 7?
+
+
+Each lp recieved a percent of the swap fees proportionaal to their share in the total liquidity. We used a mapping to a struct called LP which 
+contained shares, eth_fees, and token_fees. Each lp shares were calculated using the proportion of their added eth liquidity to the total ETH 
+in the exchnage/contract. When a swap happened, each lp would recieve rewards based off their proportion of shares held at the time the swap occured.
+This percentage of the fee was added to their eth_fees and token_fees so each lp would have its own tally of fees accumulated while they held liquidity.
+The contract would store total fees as well. Based on how many shares the lp withdraws, they can take portions of their assigned fees or all of it.
+
+
+3. Describe at least one method you used to minimize your exchange contract's gas usage. Why was this method effective?
+
+
+In our removeLiquidity function, if a LP's shares become zero, we used the removeLP function to remove them from lp_providers.
+The removeLP function was designed to minimize the contract's gas usage, because it finds the lp that should be removed, swaps it
+with the last LP in the array, and then pops the last element of lp_providers. This swap-and-pop method is much more gas-efficient than
+removing the lp by shifting every lp after it forward by one.
+
+
+4. Optional Feedback:
+4a. How much time did you spend on the assignment?
+
+# TODO: answer question 4(a) here
+
+4b. What is one thing that would have been useful to know before starting the assignment?
+
+# TODO: answer question 4(b) here
+
+4c. If you could change one with about this assignment, what would you change?
+
+# TODO: answer question 4(c) here
+
+4d. Please feel free to include any other feedback you may have below.
+
+# TODO: answer question 4(d) here
